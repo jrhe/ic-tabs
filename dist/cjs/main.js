@@ -4,6 +4,7 @@ var TabListComponent = require("./tab-list")["default"] || require("./tab-list")
 var TabPanelComponent = require("./tab-panel")["default"] || require("./tab-panel");
 var TabsComponent = require("./tabs")["default"] || require("./tabs");
 var tabsCssTemplate = require("./tabs-css")["default"] || require("./tabs-css");
+var tabPanelTemplate = require("./tab-panel-template")["default"] || require("./tab-panel-template");
 var Application = require("ember").Application;
 
 Application.initializer({
@@ -14,6 +15,7 @@ Application.initializer({
     container.register('component:ic-tab-panel', TabPanelComponent);
     container.register('component:ic-tabs',      TabsComponent);
     container.register('template:components/ic-tabs-css', tabsCssTemplate);
+    container.register('template:components/ic-tab-panel', tabPanelTemplate);
   }
 });
 

@@ -5,6 +5,7 @@ var TabListComponent = _dereq_("./tab-list")["default"] || _dereq_("./tab-list")
 var TabPanelComponent = _dereq_("./tab-panel")["default"] || _dereq_("./tab-panel");
 var TabsComponent = _dereq_("./tabs")["default"] || _dereq_("./tabs");
 var tabsCssTemplate = _dereq_("./tabs-css")["default"] || _dereq_("./tabs-css");
+var tabPanelTemplate = _dereq_("./tab-panel-template")["default"] || _dereq_("./tab-panel-template");
 var Application = window.Ember.Application;
 
 Application.initializer({
@@ -15,6 +16,7 @@ Application.initializer({
     container.register('component:ic-tab-panel', TabPanelComponent);
     container.register('component:ic-tabs',      TabsComponent);
     container.register('template:components/ic-tabs-css', tabsCssTemplate);
+    container.register('template:components/ic-tab-panel', tabPanelTemplate);
   }
 });
 
@@ -22,7 +24,7 @@ exports.TabComponent = TabComponent;
 exports.TabListComponent = TabListComponent;
 exports.TabPanelComponent = TabPanelComponent;
 exports.TabsComponent = TabsComponent;
-},{"./tab":4,"./tab-list":2,"./tab-panel":3,"./tabs":6,"./tabs-css":5}],2:[function(_dereq_,module,exports){
+},{"./tab":5,"./tab-list":2,"./tab-panel":4,"./tab-panel-template":3,"./tabs":7,"./tabs-css":6}],2:[function(_dereq_,module,exports){
 "use strict";
 var Component = window.Ember.Component;
 var ArrayProxy = window.Ember.ArrayProxy;
@@ -72,7 +74,7 @@ exports["default"] = Component.extend({
 
   registerWithTabs: function() {
     this.get('parentView').registerTabList(this);
-  }.on('didInsertElement'),
+  }.on('willInsertElement'),
 
   /**
    * Storage for all tab components, facilitating keyboard navigation.
@@ -189,6 +191,21 @@ exports["default"] = Component.extend({
 });
 },{}],3:[function(_dereq_,module,exports){
 "use strict";
+exports["default"] = Ember.Handlebars.template({"1":function(depth0,helpers,partials,data) {
+  var stack1, buffer = '';
+  data.buffer.push("  ");
+  stack1 = helpers._triageMustache.call(depth0, "yield", {"name":"_triageMustache","hash":{},"hashTypes":{},"hashContexts":{},"types":["ID"],"contexts":[depth0],"data":data});
+  if (stack1 != null) { data.buffer.push(stack1); }
+  data.buffer.push("\n");
+  return buffer;
+},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+  var stack1, buffer = '';
+  stack1 = helpers['if'].call(depth0, "active", {"name":"if","hash":{},"hashTypes":{},"hashContexts":{},"fn":this.program(1, data),"inverse":this.noop,"types":["ID"],"contexts":[depth0],"data":data});
+  if (stack1 != null) { data.buffer.push(stack1); }
+  return buffer;
+},"useData":true});
+},{}],4:[function(_dereq_,module,exports){
+"use strict";
 var Component = window.Ember.Component;
 var computed = window.Ember.computed;
 
@@ -270,6 +287,18 @@ exports["default"] = Component.extend({
   }.property('tab.active'),
 
   /**
+   * Shows or hides this panel depending on whether or not its active.
+   *
+   * @method toggleVisibility
+   * @private
+   */
+
+  toggleVisibility: function() {
+    var display = this.get('active') ? '' : 'none';
+    this.$().css('display', display);
+  }.observes('active'),
+
+  /**
    * Registers with the TabsComponent.
    *
    * @method registerWithTabs
@@ -278,14 +307,14 @@ exports["default"] = Component.extend({
 
   registerWithTabs: function() {
     this.get('parentView').registerTabPanel(this);
-  }.on('didInsertElement'),
+  }.on('willInsertElement'),
 
   unregisterWithTabs: function() {
     this.get('parentView').unregisterTabPanel(this);
   }.on('willDestroyElement')
 
 });
-},{}],4:[function(_dereq_,module,exports){
+},{}],5:[function(_dereq_,module,exports){
 "use strict";
 var Component = window.Ember.Component;
 var computed = window.Ember.computed;
@@ -477,12 +506,12 @@ exports["default"] = Component.extend({
 
 
 });
-},{}],5:[function(_dereq_,module,exports){
+},{}],6:[function(_dereq_,module,exports){
 "use strict";
 exports["default"] = Ember.Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
   data.buffer.push("ic-tabs,\nic-tab-list {\n  display: block;\n}\n\nic-tab-panel {\n  display: none;\n}\n\nic-tab-list {\n  border-bottom: 1px solid #aaa;\n}\n\nic-tab {\n  display: inline-block;\n  padding: 6px 12px;\n  border: 1px solid transparent;\n  border-top-left-radius: 3px;\n  border-top-right-radius: 3px;\n  cursor: pointer;\n  margin-bottom: -1px;\n  position: relative;\n}\n\nic-tab[selected] {\n  border-color: #aaa;\n  border-bottom-color: #fff;\n}\n\nic-tab:focus {\n  box-shadow: 0 10px 0 0 #fff,\n              0 0 5px hsl(208, 99%, 50%);\n  border-color: hsl(208, 99%, 50%);\n  border-bottom-color: #fff;\n  outline: none;\n}\n\nic-tab:focus:before,\nic-tab:focus:after {\n  content: '';\n  position: absolute;\n  bottom: -6px;\n  width: 5px;\n  height: 5px;\n  background: #fff;\n}\n\nic-tab:focus:before {\n  left: -4px;\n}\n\nic-tab:focus:after {\n  right: -4px;\n}\n\nic-tab-panel.active {\n  display: block;\n}\n\n");
   },"useData":true});
-},{}],6:[function(_dereq_,module,exports){
+},{}],7:[function(_dereq_,module,exports){
 "use strict";
 var Component = window.Ember.Component;
 var ArrayProxy = window.Ember.ArrayProxy;

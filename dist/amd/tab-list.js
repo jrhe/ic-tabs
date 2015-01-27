@@ -50,7 +50,7 @@ define(
 
       registerWithTabs: function() {
         this.get('parentView').registerTabList(this);
-      }.on('didInsertElement'),
+      }.on('willInsertElement'),
 
       /**
        * Storage for all tab components, facilitating keyboard navigation.

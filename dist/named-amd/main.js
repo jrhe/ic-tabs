@@ -1,13 +1,14 @@
 define("ic-tabs",
-  ["./tab","./tab-list","./tab-panel","./tabs","./tabs-css","ember","exports"],
-  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __exports__) {
+  ["./tab","./tab-list","./tab-panel","./tabs","./tabs-css","./tab-panel-template","ember","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__, __exports__) {
     "use strict";
     var TabComponent = __dependency1__["default"] || __dependency1__;
     var TabListComponent = __dependency2__["default"] || __dependency2__;
     var TabPanelComponent = __dependency3__["default"] || __dependency3__;
     var TabsComponent = __dependency4__["default"] || __dependency4__;
     var tabsCssTemplate = __dependency5__["default"] || __dependency5__;
-    var Application = __dependency6__.Application;
+    var tabPanelTemplate = __dependency6__["default"] || __dependency6__;
+    var Application = __dependency7__.Application;
 
     Application.initializer({
       name: 'ic-tabs',
@@ -17,6 +18,7 @@ define("ic-tabs",
         container.register('component:ic-tab-panel', TabPanelComponent);
         container.register('component:ic-tabs',      TabsComponent);
         container.register('template:components/ic-tabs-css', tabsCssTemplate);
+        container.register('template:components/ic-tab-panel', tabPanelTemplate);
       }
     });
 
@@ -77,7 +79,7 @@ define("ic-tabs/tab-list",
 
       registerWithTabs: function() {
         this.get('parentView').registerTabList(this);
-      }.on('didInsertElement'),
+      }.on('willInsertElement'),
 
       /**
        * Storage for all tab components, facilitating keyboard navigation.
@@ -193,6 +195,24 @@ define("ic-tabs/tab-list",
 
     });
   });
+define("ic-tabs/tab-panel-template",
+  ["exports"],
+  function(__exports__) {
+    "use strict";
+    __exports__["default"] = Ember.Handlebars.template({"1":function(depth0,helpers,partials,data) {
+      var stack1, buffer = '';
+      data.buffer.push("  ");
+      stack1 = helpers._triageMustache.call(depth0, "yield", {"name":"_triageMustache","hash":{},"hashTypes":{},"hashContexts":{},"types":["ID"],"contexts":[depth0],"data":data});
+      if (stack1 != null) { data.buffer.push(stack1); }
+      data.buffer.push("\n");
+      return buffer;
+    },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+      var stack1, buffer = '';
+      stack1 = helpers['if'].call(depth0, "active", {"name":"if","hash":{},"hashTypes":{},"hashContexts":{},"fn":this.program(1, data),"inverse":this.noop,"types":["ID"],"contexts":[depth0],"data":data});
+      if (stack1 != null) { data.buffer.push(stack1); }
+      return buffer;
+    },"useData":true});
+  });
 define("ic-tabs/tab-panel",
   ["ember","exports"],
   function(__dependency1__, __exports__) {
@@ -278,6 +298,18 @@ define("ic-tabs/tab-panel",
       }.property('tab.active'),
 
       /**
+       * Shows or hides this panel depending on whether or not its active.
+       *
+       * @method toggleVisibility
+       * @private
+       */
+
+      toggleVisibility: function() {
+        var display = this.get('active') ? '' : 'none';
+        this.$().css('display', display);
+      }.observes('active'),
+
+      /**
        * Registers with the TabsComponent.
        *
        * @method registerWithTabs
@@ -286,7 +318,7 @@ define("ic-tabs/tab-panel",
 
       registerWithTabs: function() {
         this.get('parentView').registerTabPanel(this);
-      }.on('didInsertElement'),
+      }.on('willInsertElement'),
 
       unregisterWithTabs: function() {
         this.get('parentView').unregisterTabPanel(this);
